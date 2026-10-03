@@ -80,12 +80,14 @@
     if (name === 'home') renderHome();
     if (name === 'review') renderReview();
     if (name === 'write') resizeCanvas();
+    if (name !== 'game') stopGame();
+    if (name === 'game') showGameSetup();
     window.scrollTo(0, 0);
   }
   $$('.tab').forEach((t) => t.addEventListener('click', () => showView(t.dataset.view)));
 
   // 單元下拉選單
-  ['#cards-unit', '#write-unit', '#quiz-unit'].forEach((sel) => {
+  ['#cards-unit', '#write-unit', '#quiz-unit', '#game-unit'].forEach((sel) => {
     const el = $(sel);
     UNITS.forEach((u) => el.add(new Option(unitLabel(u), u.id)));
   });
@@ -398,6 +400,166 @@
 
   $$('.type-btn').forEach((b) =>
     b.addEventListener('click', () => startQuiz(charsOf($('#quiz-unit').value), b.dataset.type)));
+
+  /* ===== 貓咪接魚 ===== */
+  const BEST_KEY = 'literacy-kh3a-game-best';
+  const LANES = 3;
+  const game = { on: false, lane: 1, score: 0, hearts: 3, pool: [], wave: null, raf: 0, timer: 0, last: null };
+  const laneX = (i) => `${((i * 2 + 1) / (LANES * 2)) * 100}%`;
+
+  function getBest() {
+    try { return Number(localStorage.getItem(BEST_KEY)) || 0; } catch (e) { return 0; }
+  }
+  function setBest(n) {
+    try { localStorage.setItem(BEST_KEY, String(n)); } catch (e) { /* 忽略 */ }
+  }
+
+  function showGameSetup() {
+    $('#game-best').textContent = getBest();
+    $('#game-setup').classList.remove('hidden');
+    $('#game-play').classList.add('hidden');
+    $('#game-over').classList.add('hidden');
+  }
+
+  function stopGame() {
+    game.on = false;
+    cancelAnimationFrame(game.raf);
+    clearTimeout(game.timer);
+    $$('#g-field .fish').forEach((f) => f.remove());
+  }
+
+  function moveCat(i) {
+    game.lane = Math.max(0, Math.min(LANES - 1, i));
+    $('#g-cat').style.left = laneX(game.lane);
+  }
+
+  function setCatMood(mood) {
+    const cat = $('#g-cat');
+    cat.classList.remove('happy', 'sad');
+    if (mood) {
+      void cat.offsetWidth; // 重新觸發動畫
+      cat.classList.add(mood);
+    }
+    $('#g-bubble').textContent = mood === 'happy' ? '💖' : mood === 'sad' ? '💦' : '';
+  }
+
+  function renderHUD() {
+    $('#g-hearts').textContent = '❤️'.repeat(game.hearts) + '🤍'.repeat(3 - game.hearts);
+    $('#g-score').textContent = game.score;
+  }
+
+  function startGame() {
+    stopGame();
+    game.pool = charsOf($('#game-unit').value);
+    game.score = 0;
+    game.hearts = 3;
+    game.last = null;
+    game.on = true;
+    $('#game-setup').classList.add('hidden');
+    $('#game-over').classList.add('hidden');
+    $('#game-play').classList.remove('hidden');
+    moveCat(1);
+    setCatMood(null);
+    renderHUD();
+    $('#g-msg').textContent = '點跑道移動小貓';
+    nextWave();
+  }
+
+  function nextWave() {
+    if (!game.on) return;
+    const pool = game.pool;
+    let target;
+    do { target = pool[Math.floor(Math.random() * pool.length)]; } while (pool.length > 1 && target === game.last);
+    game.last = target;
+    // 干擾選項：不同字、不同讀音，優先從同一範圍挑
+    const ok = (x) => x.c !== target.c && x.zy !== target.zy;
+    let others = shuffle(pool.filter(ok)).slice(0, LANES - 1);
+    if (others.length < LANES - 1) others = others.concat(shuffle(ALL_CHARS.filter((x) => ok(x) && !others.includes(x))).slice(0, LANES - 1 - others.length));
+    const opts = shuffle([target, ...others]);
+
+    $('#g-zy').textContent = target.zy;
+    $('#g-word').textContent = `（${target.words[0].replaceAll(target.c, '＿')}）`;
+    const field = $('#g-field');
+    const fishes = opts.map((ch, i) => {
+      const f = document.createElement('div');
+      f.className = 'fish';
+      f.style.left = laneX(i);
+      f.innerHTML = `<span>${ch.c}</span>`;
+      field.appendChild(f);
+      return { ch, el: f };
+    });
+    const dur = Math.max(2800, 6500 - game.score * 200);
+    game.wave = { target, fishes, start: performance.now(), dur };
+    game.raf = requestAnimationFrame(fall);
+  }
+
+  function fall(now) {
+    if (!game.on || !game.wave) return;
+    const w = game.wave;
+    const field = $('#g-field');
+    const catH = $('#g-cat').offsetHeight;
+    const fishH = w.fishes[0].el.offsetHeight;
+    const travel = field.clientHeight - catH * 0.75 - fishH;
+    const p = Math.min(1, (now - w.start) / w.dur);
+    w.fishes.forEach((f) => { f.el.style.transform = `translate(-50%, ${p * travel}px)`; });
+    if (p < 1) { game.raf = requestAnimationFrame(fall); return; }
+    landWave();
+  }
+
+  function landWave() {
+    const w = game.wave;
+    game.wave = null;
+    const caught = w.fishes[game.lane];
+    const c = w.target.c;
+    w.fishes.forEach((f) => {
+      if (f.ch === w.target) f.el.classList.add('good');
+      else if (f === caught) f.el.classList.add('bad');
+    });
+    if (caught.ch === w.target) {
+      game.score++;
+      caught.el.classList.add('eaten');
+      setCatMood('happy');
+      $('#g-msg').textContent = `好吃！接到「${c}」 ${w.target.words[0]}`;
+      delete state.wrong[c];
+    } else {
+      game.hearts--;
+      setCatMood('sad');
+      $('#g-msg').textContent = `哎呀！${w.target.zy} 是「${c}」（${w.target.words[0]}）`;
+      state.wrong[c] = (state.wrong[c] || 0) + 1;
+    }
+    save();
+    renderHUD();
+    game.timer = setTimeout(() => {
+      w.fishes.forEach((f) => f.el.remove());
+      if (game.hearts <= 0) gameOver(); else nextWave();
+    }, caught.ch === w.target ? 700 : 1600);
+  }
+
+  function gameOver() {
+    stopGame();
+    const best = getBest();
+    const isRecord = game.score > best;
+    if (isRecord) setBest(game.score);
+    $('#game-play').classList.add('hidden');
+    $('#game-over').classList.remove('hidden');
+    $('#go-title').textContent = isRecord ? '🎉 新紀錄！' : '遊戲結束！';
+    $('#go-text').textContent = `小貓吃到 ${game.score} 條魚` + (isRecord ? '，打破紀錄了！' : `（最高紀錄 ${best} 條）`) + '。接錯的字已收進錯字本。';
+  }
+
+  $('#game-start').addEventListener('click', startGame);
+  $('#go-again').addEventListener('click', startGame);
+  $('#go-review').addEventListener('click', () => showView('review'));
+  $('#g-speak').addEventListener('click', () => {
+    const t = game.last;
+    if (t) speak(`${t.c}，${t.words[0]}的${t.c}`);
+  });
+  $$('#g-field .lane').forEach((l) => l.addEventListener('pointerdown', () => moveCat(Number(l.dataset.lane))));
+  document.addEventListener('keydown', (e) => {
+    if (!game.on) return;
+    if (e.key === 'ArrowLeft') { moveCat(game.lane - 1); e.preventDefault(); }
+    if (e.key === 'ArrowRight') { moveCat(game.lane + 1); e.preventDefault(); }
+  });
+  document.addEventListener('visibilitychange', () => { if (document.hidden && game.on) { stopGame(); showGameSetup(); } });
 
   /* ===== 錯字本 ===== */
   function renderReview() {

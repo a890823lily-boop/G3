@@ -24,6 +24,7 @@
     <button class="tab" data-view="cards">生字卡</button>
     <button class="tab" data-view="write">寫字練習</button>
     <button class="tab" data-view="quiz">小測驗</button>
+    <button class="tab" data-view="game">貓咪遊戲</button>
     <button class="tab" data-view="review">錯字本</button>
   </nav>
 
@@ -110,6 +111,70 @@
         <h2 id="r-title"></h2>
         <p id="r-text"></p>
         <button class="btn primary" id="r-again">再玩一次</button>
+      </div>
+    </section>
+
+    <!-- 貓咪接魚 -->
+    <section id="view-game" class="view">
+      <div id="game-setup" class="card center">
+        <div class="game-hero"><svg class="cat-svg" viewBox="110 60 292 250" aria-hidden="true">
+            <path d="M150 168 L172 70 L232 126 Z" fill="#F5A04E"/><path d="M168 150 L178 100 L210 128 Z" fill="#FFC9A6"/>
+            <path d="M362 168 L340 70 L280 126 Z" fill="#F5A04E"/><path d="M344 150 L334 100 L302 128 Z" fill="#FFC9A6"/>
+            <ellipse cx="256" cy="200" rx="132" ry="104" fill="#F7AE5E"/>
+            <path d="M226 110 q30 -10 60 0 M236 130 q20 -6 40 0" stroke="#E08A3A" stroke-width="8" fill="none" stroke-linecap="round"/>
+            <g class="eyes-happy"><path d="M184 196 q20 -22 40 0 M288 196 q20 -22 40 0" stroke="#3B2A22" stroke-width="9" fill="none" stroke-linecap="round"/></g>
+            <g class="eyes-sad"><circle cx="204" cy="190" r="13" fill="#3B2A22"/><circle cx="308" cy="190" r="13" fill="#3B2A22"/><path d="M196 206 q-6 18 4 22 q8 -6 -4 -22z" fill="#7EC8F2"/></g>
+            <path d="M248 222 h16 l-8 9 z" fill="#E86F7E"/>
+            <path d="M256 231 q-10 16 -24 8 M256 231 q10 16 24 8" stroke="#3B2A22" stroke-width="6" fill="none" stroke-linecap="round"/>
+            <ellipse cx="176" cy="234" rx="20" ry="12" fill="#FF8FA3" opacity=".7"/><ellipse cx="336" cy="234" rx="20" ry="12" fill="#FF8FA3" opacity=".7"/>
+            <path d="M120 214h56M124 236h52M392 214h-56M388 236h-52" stroke="#8A5A3A" stroke-width="5" stroke-linecap="round"/>
+            <ellipse cx="188" cy="284" rx="34" ry="22" fill="#F7AE5E"/><ellipse cx="324" cy="284" rx="34" ry="22" fill="#F7AE5E"/>
+          </svg></div>
+        <h2>🐟 貓咪接魚</h2>
+        <p>看上面的注音，點一下跑道讓小貓跑過去，<br>接住寫著<b>正確國字</b>的魚！</p>
+        <p class="hint">接錯或沒接到會少一顆 ❤️，三顆用完遊戲結束。<br>魚會越掉越快喔！</p>
+        <label class="field">範圍
+          <select id="game-unit" class="unit-select"><option value="all">全部課次</option></select>
+        </label>
+        <button class="btn primary big" id="game-start">開始遊戲</button>
+        <p class="hint">最高紀錄：<b id="game-best">0</b> 條魚</p>
+      </div>
+      <div id="game-play" class="hidden">
+        <div class="game-hud">
+          <span id="g-hearts" aria-label="剩下的愛心"></span>
+          <span>🐟 <b id="g-score">0</b></span>
+        </div>
+        <div class="game-prompt">
+          <span class="g-zy" id="g-zy"></span>
+          <span class="g-word" id="g-word"></span>
+          <button class="btn g-speak" id="g-speak" aria-label="唸給我聽">🔊</button>
+        </div>
+        <div class="game-field" id="g-field">
+          <div class="lane" data-lane="0"></div><div class="lane" data-lane="1"></div><div class="lane" data-lane="2"></div>
+          <div class="game-cat" id="g-cat"><svg class="cat-svg" viewBox="110 60 292 250" aria-hidden="true">
+            <path d="M150 168 L172 70 L232 126 Z" fill="#F5A04E"/><path d="M168 150 L178 100 L210 128 Z" fill="#FFC9A6"/>
+            <path d="M362 168 L340 70 L280 126 Z" fill="#F5A04E"/><path d="M344 150 L334 100 L302 128 Z" fill="#FFC9A6"/>
+            <ellipse cx="256" cy="200" rx="132" ry="104" fill="#F7AE5E"/>
+            <path d="M226 110 q30 -10 60 0 M236 130 q20 -6 40 0" stroke="#E08A3A" stroke-width="8" fill="none" stroke-linecap="round"/>
+            <g class="eyes-happy"><path d="M184 196 q20 -22 40 0 M288 196 q20 -22 40 0" stroke="#3B2A22" stroke-width="9" fill="none" stroke-linecap="round"/></g>
+            <g class="eyes-sad"><circle cx="204" cy="190" r="13" fill="#3B2A22"/><circle cx="308" cy="190" r="13" fill="#3B2A22"/><path d="M196 206 q-6 18 4 22 q8 -6 -4 -22z" fill="#7EC8F2"/></g>
+            <path d="M248 222 h16 l-8 9 z" fill="#E86F7E"/>
+            <path d="M256 231 q-10 16 -24 8 M256 231 q10 16 24 8" stroke="#3B2A22" stroke-width="6" fill="none" stroke-linecap="round"/>
+            <ellipse cx="176" cy="234" rx="20" ry="12" fill="#FF8FA3" opacity=".7"/><ellipse cx="336" cy="234" rx="20" ry="12" fill="#FF8FA3" opacity=".7"/>
+            <path d="M120 214h56M124 236h52M392 214h-56M388 236h-52" stroke="#8A5A3A" stroke-width="5" stroke-linecap="round"/>
+            <ellipse cx="188" cy="284" rx="34" ry="22" fill="#F7AE5E"/><ellipse cx="324" cy="284" rx="34" ry="22" fill="#F7AE5E"/>
+          </svg><span class="bubble" id="g-bubble"></span></div>
+        </div>
+        <p class="feedback" id="g-msg">點跑道移動小貓</p>
+      </div>
+      <div id="game-over" class="card center hidden">
+        <div class="result-emoji">😺</div>
+        <h2 id="go-title"></h2>
+        <p id="go-text"></p>
+        <div class="card-actions">
+          <button class="btn primary" id="go-again">再玩一次</button>
+          <button class="btn" id="go-review">看錯字本</button>
+        </div>
       </div>
     </section>
 
