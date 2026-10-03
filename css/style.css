@@ -273,3 +273,99 @@ main { max-width: 760px; margin: 0 auto; padding: 16px; }
 @keyframes cat-hop { 40% { transform: translate(-50%, -18px); } }
 @keyframes cat-shake { 25% { transform: translateX(-56%); } 75% { transform: translateX(-44%); } }
 .bubble { position: absolute; top: -8px; right: -4px; font-size: 1.6rem; }
+
+/* ===== 遊戲選單 ===== */
+.menu-row { display: flex; gap: 10px; align-items: flex-end; justify-content: center; flex-wrap: wrap; }
+.menu-row .field { margin-bottom: 0; }
+.game-list { display: grid; gap: 10px; margin-top: 12px; }
+.game-pick {
+  display: flex; align-items: center; gap: 12px; text-align: left; cursor: pointer;
+  background: var(--card); border: 2px solid var(--border); border-radius: var(--radius);
+  padding: 12px 14px; box-shadow: var(--shadow);
+}
+.game-pick:hover, .game-pick:focus-visible { border-color: var(--primary); }
+.game-pick:active { transform: scale(.98); }
+.gp-emoji { font-size: 2.4rem; }
+.gp-text { display: flex; flex-direction: column; flex: 1; }
+.gp-text b { font-size: 1.15rem; }
+.gp-text small { color: var(--muted); }
+.gp-best { font-size: .8rem; font-weight: 700; color: var(--accent); white-space: nowrap; }
+.game-back { padding: 4px 12px; }
+.game-hud { align-items: center; }
+
+/* ===== 打老鼠 ===== */
+.timebar { height: 10px; background: var(--border); border-radius: 99px; overflow: hidden; margin-bottom: 8px; }
+.timebar div { height: 100%; background: linear-gradient(90deg, var(--accent), var(--good)); }
+.game-prompt.flash { animation: prompt-flash .5s; }
+@keyframes prompt-flash { 0% { background: #fff3b0; transform: scale(1.04); } }
+.mole-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 10px;
+  background: linear-gradient(#bfe6ff, #a9dcc8); border-radius: var(--radius);
+  touch-action: manipulation; user-select: none; -webkit-user-select: none;
+}
+.hole {
+  position: relative; height: 124px; overflow: hidden; cursor: pointer; border-radius: 16px;
+  background: radial-gradient(ellipse 42% 12% at 50% 84%, #5b3a29 98%, transparent 100%), #d9f4e9;
+}
+.hole::after {   /* 洞口前緣，蓋住老鼠的下半身 */
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 16%;
+  background: #d9f4e9; pointer-events: none;
+}
+.mouse {
+  position: absolute; left: 50%; bottom: 17%; width: 86%; transform: translate(-50%, 120%);
+  transition: transform .16s ease-out; display: flex; flex-direction: column; align-items: center;
+  pointer-events: none;
+}
+.mouse.up { transform: translate(-50%, 0); }
+.mouse-svg { width: 76%; display: block; }
+.sign {
+  margin-top: -6px; background: #fff; border: 2px solid #9aa5b1; border-radius: 10px;
+  padding: 0 10px; color: #1f2933; font-weight: 700; line-height: 1.25;
+  font-family: "BiauKai", "DFKai-SB", "TW-Kai", "Kaiti TC", "KaiTi", serif; font-size: 1.9rem;
+}
+.m-dizzy { display: none; }
+.hole.hit .m-dizzy { display: inline; }
+.hole.hit .m-eyes { display: none; }
+.pow {
+  position: absolute; left: 50%; top: 18%; transform: translateX(-50%); white-space: nowrap;
+  font-weight: 800; font-size: 1.05rem; pointer-events: none; opacity: 0; text-shadow: 0 1px 0 #fff;
+}
+.hole.hit .pow { color: var(--good); animation: pow-up .8s; }
+.hole.oops .pow { color: var(--bad); animation: pow-up .8s; }
+@keyframes pow-up { 0% { opacity: 1; transform: translate(-50%, 10px); } 100% { opacity: 0; transform: translate(-50%, -24px); } }
+
+/* ===== 翻翻樂 ===== */
+.memory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; perspective: 800px; }
+.mcard {
+  position: relative; height: 104px; border: 0; padding: 0; background: none; cursor: pointer;
+  transform-style: preserve-3d; transition: transform .4s;
+}
+.mcard.flipped { transform: rotateY(180deg); }
+.mface {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  border-radius: 14px; backface-visibility: hidden; -webkit-backface-visibility: hidden; box-shadow: var(--shadow);
+}
+.mback {
+  background: repeating-linear-gradient(45deg, #9fdcc8 0 10px, #b6e6d6 10px 20px);
+  font-size: 2rem; border: 3px solid #fff;
+}
+.mfront { background: var(--card); border: 3px solid var(--border); transform: rotateY(180deg); }
+.mfront.zy { background: #fff8e1; }
+.m-char { font-family: "BiauKai", "DFKai-SB", "TW-Kai", "Kaiti TC", "KaiTi", serif; font-size: 2.8rem; font-weight: 700; line-height: 1; }
+.m-zy { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
+.mfront small { font-size: .85rem; color: var(--muted); }
+.mcard.matched .mfront { border-color: var(--good); background: var(--good-soft); }
+.mcard.matched { animation: m-pop .4s .3s; }
+.mcard.nope .mfront { border-color: var(--bad); }
+@keyframes m-pop { 50% { transform: rotateY(180deg) scale(1.08); } }
+
+/* ===== 撒花 ===== */
+.confetti { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 50; }
+.confetti span { position: absolute; top: -40px; font-size: 1.6rem; animation: confetti-fall 2.5s linear forwards; }
+@keyframes confetti-fall { to { transform: translateY(110vh) rotate(540deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .mcard, .mouse, .game-cat { transition: none; }
+  .confetti { display: none; }
+}
+.cat-slot { display: block; }
