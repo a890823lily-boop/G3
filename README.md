@@ -54,5 +54,5 @@ G3/
 ├── css/style.css
 ├── js/data.js      # 生字資料
 ├── js/app.js       # 網站功能
-└── icons/icon.svg
+└── icons/           # APP 圖示（小貓趴字格）：icon.svg 與各尺寸 PNG
 ```

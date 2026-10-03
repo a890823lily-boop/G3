@@ -1,6 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="110" fill="#2f80ed"/>
-  <rect x="96" y="96" width="320" height="320" rx="24" fill="#fffaf0"/>
-  <path d="M256 96v320M96 256h320" stroke="#f2b8b8" stroke-width="6" stroke-dasharray="20 14"/>
-  <text x="256" y="262" font-size="250" text-anchor="middle" dominant-baseline="middle" fill="#1f2933" font-family="serif">字</text>
+  <rect width="512" height="512" rx="112" fill="#CDEFE3"/>
+  <g fill="#FFE36E"><path d="M78 96l8 18 18 8-18 8-8 18-8-18-18-8 18-8z"/><path d="M432 78l6 13 13 6-13 6-6 13-6-13-13-6 13-6z"/></g>
+  <path d="M150 168 L172 70 L232 126 Z" fill="#F5A04E"/><path d="M168 150 L178 100 L210 128 Z" fill="#FFC9A6"/>
+  <path d="M362 168 L340 70 L280 126 Z" fill="#F5A04E"/><path d="M344 150 L334 100 L302 128 Z" fill="#FFC9A6"/>
+  <ellipse cx="256" cy="200" rx="132" ry="104" fill="#F7AE5E"/>
+  <path d="M226 110 q30 -10 60 0 M236 130 q20 -6 40 0" stroke="#E08A3A" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M184 196 q20 -22 40 0" stroke="#3B2A22" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <path d="M288 196 q20 -22 40 0" stroke="#3B2A22" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <path d="M248 222 h16 l-8 9 z" fill="#E86F7E"/>
+  <path d="M256 231 q-10 16 -24 8 M256 231 q10 16 24 8" stroke="#3B2A22" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <ellipse cx="176" cy="234" rx="20" ry="12" fill="#FF8FA3" opacity=".7"/><ellipse cx="336" cy="234" rx="20" ry="12" fill="#FF8FA3" opacity=".7"/>
+  <path d="M120 214h56M124 236h52M392 214h-56M388 236h-52" stroke="#8A5A3A" stroke-width="5" stroke-linecap="round"/>
+  <rect x="126" y="270" width="260" height="196" rx="28" fill="#fff" stroke="#5CC6A5" stroke-width="8"/>
+  <path d="M256 278v180M134 368h244" stroke="#A8E2CF" stroke-width="5" stroke-dasharray="14 10"/>
+  <text x="256" y="374" font-size="150" text-anchor="middle" dominant-baseline="middle" fill="#2E9A7B" font-weight="700" font-family="'Noto Serif CJK TC','Noto Sans CJK TC',serif">字</text>
+  <ellipse cx="188" cy="274" rx="34" ry="22" fill="#F7AE5E"/><ellipse cx="324" cy="274" rx="34" ry="22" fill="#F7AE5E"/>
+  <path d="M176 266v14M190 264v16M202 266v14M312 266v14M326 264v16M338 266v14" stroke="#E08A3A" stroke-width="4" stroke-linecap="round"/>
 </svg>

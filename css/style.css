@@ -1,7 +1,7 @@
 /* ===== 色彩與基本設定 ===== */
 :root {
-  --primary: #2f80ed;
-  --primary-soft: #e8f1fd;
+  --primary: #23876a;
+  --primary-soft: #e3f6ef;
   --accent: #f2994a;
   --good: #27ae60;
   --good-soft: #e3f6ea;
@@ -9,7 +9,7 @@
   --bad-soft: #fdeaea;
   --text: #1f2933;
   --muted: #5f6b7a;
-  --bg: #fffaf0;
+  --bg: #f4fbf8;
   --card: #ffffff;
   --border: #e6e2d8;
   --grid: #f2b8b8;
@@ -19,8 +19,8 @@
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --primary: #6aa8ff;
-    --primary-soft: #1d2a3d;
+    --primary: #6fd3b4;
+    --primary-soft: #1a332b;
     --good-soft: #1b3326;
     --bad-soft: #3a1f1f;
     --text: #e8edf2;
@@ -120,7 +120,11 @@ main { max-width: 760px; margin: 0 auto; padding: 16px; }
     linear-gradient(var(--grid), var(--grid)) center/100% 1px no-repeat,
     linear-gradient(var(--grid), var(--grid)) center/1px 100% no-repeat;
 }
-.zhuyin { writing-mode: vertical-rl; font-size: 1.8rem; letter-spacing: .05em; color: var(--primary); font-weight: 700; }
+.zhuyin { display: inline-flex; font-size: 2.1rem; line-height: 1.1; color: var(--primary); font-weight: 700; padding-right: .45em; }
+.zy-col { display: flex; flex-direction: column; align-items: center; }
+.zy-light { line-height: .6; }
+.zy-last { position: relative; }
+.zy-tone { position: absolute; left: 100%; top: -.2em; font-size: .9em; line-height: 1; }
 .meta { display: flex; justify-content: center; gap: 24px; margin: 16px 0 8px; }
 .meta div { text-align: center; }
 .meta dt { color: var(--muted); font-size: .85rem; }

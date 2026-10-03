@@ -32,6 +32,19 @@
   const charsOf = (unitId) =>
     unitId === 'all' ? ALL_CHARS : ALL_CHARS.filter((ch) => ch.unit === unitId);
   const findChar = (c) => ALL_CHARS.find((ch) => ch.c === c);
+  // 直式注音：符號由上往下排，聲調放在右側，輕聲點放在最上面
+  // （不用 CSS 直排，避免聲調符號被轉向而看錯）
+  function zyHTML(zy) {
+    const light = zy.startsWith('˙');
+    let body = zy.replace('˙', '');
+    let tone = '';
+    if (/[ˊˇˋ]$/.test(body)) { tone = body.slice(-1); body = body.slice(0, -1); }
+    const syms = [...body].map((s, i, all) =>
+      i === all.length - 1 && tone
+        ? `<span class="zy-last">${s}<span class="zy-tone">${tone}</span></span>`
+        : `<span>${s}</span>`).join('');
+    return `<span class="zy-col">${light ? '<span class="zy-light">˙</span>' : ''}${syms}</span>`;
+  }
   const writeChars = (unitId) => charsOf(unitId).filter((ch) => !ch.r);
   const unitLabel = (u) => `第${u.num}課${u.name ? ' ' + u.name : ''}`;
 
@@ -122,7 +135,8 @@
     $('#cc-char').textContent = ch.c;
     $('#cc-kind').textContent = ch.r ? '認讀字' : '寫字';
     $('#cc-kind').classList.toggle('read', !!ch.r);
-    $('#cc-zy').textContent = ch.zy;
+    $('#cc-zy').innerHTML = zyHTML(ch.zy);
+    $('#cc-zy').setAttribute('aria-label', ch.zy);
     $('#cc-bs').textContent = ch.bs;
     $('#cc-bh').textContent = ch.bh + ' 畫';
     const words = $('#cc-words');

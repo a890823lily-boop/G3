@@ -1,5 +1,5 @@
 // 修改網站內容後請把版本號加一，讓使用者取得新版本
-const CACHE_NAME = 'literacy-kh3a-v7';
+const CACHE_NAME = 'literacy-kh3a-v9';
 const ASSETS = [
   './',
   './index.html',
@@ -8,6 +8,10 @@ const ASSETS = [
   './js/app.js',
   './manifest.webmanifest',
   './icons/icon.svg',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/apple-touch-icon.png',
+  './icons/favicon-32.png',
 ];
 
 self.addEventListener('install', (e) => {
