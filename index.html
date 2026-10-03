@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>三年級識字樂園</title>
+  <meta name="description" content="康軒版國語三上生字學習：生字卡、寫字練習、小測驗與錯字本。">
+  <meta name="theme-color" content="#2f80ed">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>📚 三年級識字樂園 <small id="book-name"></small></h1>
+    <div class="stars" title="累積星星">⭐ <span id="star-count">0</span></div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-view="home">首頁</button>
+    <button class="tab" data-view="cards">生字卡</button>
+    <button class="tab" data-view="write">寫字練習</button>
+    <button class="tab" data-view="quiz">小測驗</button>
+    <button class="tab" data-view="review">錯字本</button>
+  </nav>
+
+  <main>
+    <!-- 首頁 -->
+    <section id="view-home" class="view active">
+      <p class="intro">選一課開始學習吧！每學會一個字可以得到一顆星星 ⭐<br><small>黑色是寫字，<span class="read-sample">藍色虛線框</span>是認讀字（會認、會唸就好）。</small></p>
+      <div id="unit-grid" class="unit-grid"></div>
+    </section>
+
+    <!-- 生字卡 -->
+    <section id="view-cards" class="view">
+      <div class="toolbar">
+        <select id="cards-unit" class="unit-select" aria-label="選擇課次"></select>
+      </div>
+      <div class="char-strip" id="char-strip"></div>
+      <article class="card" id="char-card">
+        <span class="kind" id="cc-kind"></span>
+        <div class="card-main">
+          <div class="big-char" id="cc-char"></div>
+          <div class="zhuyin" id="cc-zy"></div>
+        </div>
+        <dl class="meta">
+          <div><dt>部首</dt><dd id="cc-bs"></dd></div>
+          <div><dt>筆畫</dt><dd id="cc-bh"></dd></div>
+        </dl>
+        <div class="words" id="cc-words"></div>
+        <p class="sentence" id="cc-s"></p>
+        <div class="card-actions">
+          <button class="btn" id="cc-prev">◀ 上一個</button>
+          <button class="btn primary" id="cc-speak">🔊 唸給我聽</button>
+          <button class="btn" id="cc-learned">☆ 我學會了</button>
+          <button class="btn" id="cc-next">下一個 ▶</button>
+        </div>
+      </article>
+    </section>
+
+    <!-- 寫字練習 -->
+    <section id="view-write" class="view">
+      <div class="toolbar">
+        <select id="write-unit" class="unit-select" aria-label="選擇課次"></select>
+        <label class="toggle"><input type="checkbox" id="write-guide" checked> 顯示描紅</label>
+      </div>
+      <div class="write-head">
+        <button class="btn" id="w-prev">◀</button>
+        <div><span class="w-char" id="w-char"></span><span class="w-info" id="w-info"></span></div>
+        <button class="btn" id="w-next">▶</button>
+      </div>
+      <div class="grid-wrap">
+        <canvas id="write-canvas" width="600" height="600" aria-label="寫字格"></canvas>
+      </div>
+      <div class="card-actions">
+        <button class="btn" id="w-clear">🧽 擦掉重寫</button>
+        <button class="btn primary" id="w-speak">🔊 唸字</button>
+      </div>
+      <p class="hint">用手指或滑鼠在田字格裡寫字，可以先描紅再關掉描紅自己寫。這裡只練習要會寫的字。</p>
+    </section>
+
+    <!-- 小測驗 -->
+    <section id="view-quiz" class="view">
+      <div id="quiz-setup" class="card">
+        <h2>選擇測驗</h2>
+        <label class="field">範圍
+          <select id="quiz-unit" class="unit-select"><option value="all">全部課次</option></select>
+        </label>
+        <div class="quiz-types">
+          <button class="type-btn" data-type="zy">🔤<b>看注音選字</b><small>依照注音找出正確的字</small></button>
+          <button class="type-btn" data-type="bs">🧩<b>部首挑戰</b><small>這個字的部首是什麼？</small></button>
+          <button class="type-btn" data-type="fill">✏️<b>句子填空</b><small>選出句子裡缺少的字</small></button>
+          <button class="type-btn" data-type="mix">🎲<b>綜合挑戰</b><small>三種題型混合出題</small></button>
+        </div>
+      </div>
+      <div id="quiz-play" class="card hidden">
+        <div class="quiz-top"><span id="q-progress"></span><span id="q-score"></span></div>
+        <div class="progress"><div id="q-bar"></div></div>
+        <p class="q-label" id="q-label"></p>
+        <div class="q-prompt" id="q-prompt"></div>
+        <div class="options" id="q-options"></div>
+        <p class="feedback" id="q-feedback"></p>
+        <button class="btn primary hidden" id="q-next">下一題 ▶</button>
+      </div>
+      <div id="quiz-result" class="card hidden center">
+        <div class="result-emoji" id="r-emoji"></div>
+        <h2 id="r-title"></h2>
+        <p id="r-text"></p>
+        <button class="btn primary" id="r-again">再玩一次</button>
+      </div>
+    </section>
+
+    <!-- 錯字本 -->
+    <section id="view-review" class="view">
+      <p class="intro">測驗答錯的字會收在這裡。再次答對就會自動移除！</p>
+      <div id="review-list" class="review-list"></div>
+      <div class="card-actions">
+        <button class="btn primary" id="review-quiz">📝 錯字複習測驗</button>
+        <button class="btn" id="reset-all">重設學習紀錄</button>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
