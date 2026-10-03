@@ -1,0 +1,14 @@
+{
+  "name": "三年級識字樂園",
+  "short_name": "識字樂園",
+  "description": "國小三年級國語生字學習",
+  "lang": "zh-Hant-TW",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fffaf0",
+  "theme_color": "#2f80ed",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
