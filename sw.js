@@ -1,5 +1,5 @@
 // 修改網站內容後請把版本號加一，讓使用者取得新版本
-const CACHE_NAME = 'literacy-kh3a-v5';
+const CACHE_NAME = 'literacy-kh3a-v6';
 const ASSETS = [
   './',
   './index.html',
