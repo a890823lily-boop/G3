@@ -45,7 +45,7 @@
 ## 檔案結構
 
 ```
-literacy-site/
+grade3-literacy-site/
 ├── index.html
 ├── manifest.webmanifest
 ├── sw.js
