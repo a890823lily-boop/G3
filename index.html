@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>三年級識字樂園</title>
-  <meta name="description" content="國小三年級國語生字學習：生字卡、寫字練習、小測驗與錯字本。">
+  <meta name="description" content="康軒版國語三上生字學習：生字卡、寫字練習、小測驗與錯字本。">
   <meta name="theme-color" content="#2f80ed">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
@@ -12,7 +12,7 @@
 </head>
 <body>
   <header class="topbar">
-    <h1>📚 三年級識字樂園</h1>
+    <h1>📚 三年級識字樂園 <small id="book-name"></small></h1>
     <div class="stars" title="累積星星">⭐ <span id="star-count">0</span></div>
   </header>
 
@@ -27,17 +27,18 @@
   <main>
     <!-- 首頁 -->
     <section id="view-home" class="view active">
-      <p class="intro">選一個單元開始學習吧！每學會一個字可以得到一顆星星 ⭐</p>
+      <p class="intro">選一課開始學習吧！每學會一個字可以得到一顆星星 ⭐<br><small>黑色是寫字，<span class="read-sample">藍色虛線框</span>是認讀字（會認、會唸就好）。</small></p>
       <div id="unit-grid" class="unit-grid"></div>
     </section>
 
     <!-- 生字卡 -->
     <section id="view-cards" class="view">
       <div class="toolbar">
-        <select id="cards-unit" class="unit-select" aria-label="選擇單元"></select>
+        <select id="cards-unit" class="unit-select" aria-label="選擇課次"></select>
       </div>
       <div class="char-strip" id="char-strip"></div>
       <article class="card" id="char-card">
+        <span class="kind" id="cc-kind"></span>
         <div class="card-main">
           <div class="big-char" id="cc-char"></div>
           <div class="zhuyin" id="cc-zy"></div>
@@ -60,7 +61,7 @@
     <!-- 寫字練習 -->
     <section id="view-write" class="view">
       <div class="toolbar">
-        <select id="write-unit" class="unit-select" aria-label="選擇單元"></select>
+        <select id="write-unit" class="unit-select" aria-label="選擇課次"></select>
         <label class="toggle"><input type="checkbox" id="write-guide" checked> 顯示描紅</label>
       </div>
       <div class="write-head">
@@ -75,7 +76,7 @@
         <button class="btn" id="w-clear">🧽 擦掉重寫</button>
         <button class="btn primary" id="w-speak">🔊 唸字</button>
       </div>
-      <p class="hint">用手指或滑鼠在田字格裡寫字，可以先描紅再關掉描紅自己寫。</p>
+      <p class="hint">用手指或滑鼠在田字格裡寫字，可以先描紅再關掉描紅自己寫。這裡只練習要會寫的字。</p>
     </section>
 
     <!-- 小測驗 -->
@@ -83,7 +84,7 @@
       <div id="quiz-setup" class="card">
         <h2>選擇測驗</h2>
         <label class="field">範圍
-          <select id="quiz-unit" class="unit-select"><option value="all">全部單元</option></select>
+          <select id="quiz-unit" class="unit-select"><option value="all">全部課次</option></select>
         </label>
         <div class="quiz-types">
           <button class="type-btn" data-type="zy">🔤<b>看注音選字</b><small>依照注音找出正確的字</small></button>

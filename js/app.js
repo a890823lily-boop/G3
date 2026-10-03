@@ -5,7 +5,7 @@
   const $$ = (sel) => document.querySelectorAll(sel);
 
   /* ===== 學習紀錄（localStorage） ===== */
-  const STORE_KEY = 'literacy-g3-v1';
+  const STORE_KEY = 'literacy-kh3a-v1';
   const state = load();
   function load() {
     try {
@@ -32,6 +32,8 @@
   const charsOf = (unitId) =>
     unitId === 'all' ? ALL_CHARS : ALL_CHARS.filter((ch) => ch.unit === unitId);
   const findChar = (c) => ALL_CHARS.find((ch) => ch.c === c);
+  const writeChars = (unitId) => charsOf(unitId).filter((ch) => !ch.r);
+  const unitLabel = (u) => `第${u.num}課${u.name ? ' ' + u.name : ''}`;
 
   let toastTimer;
   function toast(msg) {
@@ -72,7 +74,7 @@
   // 單元下拉選單
   ['#cards-unit', '#write-unit', '#quiz-unit'].forEach((sel) => {
     const el = $(sel);
-    UNITS.forEach((u) => el.add(new Option(`${u.emoji} ${u.name}`, u.id)));
+    UNITS.forEach((u) => el.add(new Option(unitLabel(u), u.id)));
   });
 
   /* ===== 首頁 ===== */
@@ -84,9 +86,10 @@
       const btn = document.createElement('button');
       btn.className = 'unit-card';
       btn.innerHTML = `
-        <div class="emoji">${u.emoji}</div>
-        <h3>${u.name}</h3>
-        <div class="preview">${u.chars.map((ch) => ch.c).join('')}</div>
+        <span class="lesson-badge">第${u.num}課</span>
+        ${u.name ? `<h3>${u.name}</h3>` : ''}
+        <div class="preview">${u.chars.filter((ch) => !ch.r).map((ch) => ch.c).join('')}</div>
+        <div class="preview read">${u.chars.filter((ch) => ch.r).map((ch) => ch.c).join('')}</div>
         <div class="bar"><div style="width:${(done / u.chars.length) * 100}%"></div></div>
         <small>已學會 ${done} / ${u.chars.length} 字</small>`;
       btn.addEventListener('click', () => {
@@ -111,12 +114,14 @@
     strip.innerHTML = '';
     list.forEach((item, i) => {
       const b = document.createElement('button');
-      b.className = 'chip' + (i === cards.idx ? ' active' : '') + (isLearned(item.c) ? ' learned' : '');
+      b.className = 'chip' + (item.r ? ' read' : '') + (i === cards.idx ? ' active' : '') + (isLearned(item.c) ? ' learned' : '');
       b.textContent = item.c;
       b.addEventListener('click', () => { cards.idx = i; renderCard(); });
       strip.appendChild(b);
     });
     $('#cc-char').textContent = ch.c;
+    $('#cc-kind').textContent = ch.r ? '認讀字' : '寫字';
+    $('#cc-kind').classList.toggle('read', !!ch.r);
     $('#cc-zy').textContent = ch.zy;
     $('#cc-bs').textContent = ch.bs;
     $('#cc-bh').textContent = ch.bh + ' 畫';
@@ -169,7 +174,7 @@
   let drawing = null;
 
   const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-  const curWrite = () => charsOf(write.unit)[write.idx];
+  const curWrite = () => writeChars(write.unit)[write.idx];
 
   function resizeCanvas() {
     const size = Math.round(canvas.clientWidth * (window.devicePixelRatio || 1));
@@ -240,12 +245,12 @@
   $('#w-clear').addEventListener('click', () => { strokes = []; drawCanvas(); });
   $('#w-speak').addEventListener('click', () => { const ch = curWrite(); speak(`${ch.c}，${ch.words[0]}的${ch.c}`); });
   $('#w-prev').addEventListener('click', () => {
-    const n = charsOf(write.unit).length;
+    const n = writeChars(write.unit).length;
     write.idx = (write.idx - 1 + n) % n;
     renderWrite();
   });
   $('#w-next').addEventListener('click', () => {
-    write.idx = (write.idx + 1) % charsOf(write.unit).length;
+    write.idx = (write.idx + 1) % writeChars(write.unit).length;
     renderWrite();
   });
   window.addEventListener('resize', () => { if ($('#view-write').classList.contains('active')) resizeCanvas(); });
@@ -273,7 +278,7 @@
       const pool = ALL_CHARS.filter((x) => x.zy !== ch.zy);
       return {
         ch, label: '看注音，選出正確的字',
-        prompt: `${ch.zy}<br><small>（${ch.words[0].replace(ch.c, '＿')}）</small>`,
+        prompt: `${ch.zy}<br><small>（${ch.words[0].replaceAll(ch.c, '＿')}）</small>`,
         answer: ch.c, options: shuffle([ch.c, ...distractors(pool, ch.c, 3, (x) => x.c)]),
       };
     }
@@ -415,6 +420,7 @@
   });
 
   /* ===== 啟動 ===== */
+  $('#book-name').textContent = BOOK;
   renderStars();
   renderHome();
   renderCard();
