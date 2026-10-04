@@ -502,5 +502,7 @@
   window.Games = {
     enter: showMenu,
     leave: () => { stopAll(); current = null; },
+    sound: Sound,
+    confetti,
   };
 })();

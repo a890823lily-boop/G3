@@ -1,12 +1,14 @@
 // 修改網站內容後請把版本號加一，讓使用者取得新版本
-const CACHE_NAME = 'literacy-kh3a-v12';
+const CACHE_NAME = 'literacy-kh3a-v13';
 const ASSETS = [
   './',
   './index.html',
   './css/style.css',
   './js/data.js',
+  './js/idioms.js',
   './js/app.js',
   './js/games.js',
+  './js/idiom-app.js',
   './manifest.webmanifest',
   './icons/icon.svg',
   './icons/icon-192.png',

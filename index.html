@@ -24,6 +24,7 @@
     <button class="tab" data-view="cards">生字卡</button>
     <button class="tab" data-view="write">寫字練習</button>
     <button class="tab" data-view="quiz">小測驗</button>
+    <button class="tab" data-view="idiom">成語</button>
     <button class="tab" data-view="game">貓咪遊戲</button>
     <button class="tab" data-view="review">錯字本</button>
   </nav>
@@ -111,6 +112,46 @@
         <h2 id="r-title"></h2>
         <p id="r-text"></p>
         <button class="btn primary" id="r-again">再玩一次</button>
+      </div>
+    </section>
+
+    <!-- 成語（資料在 js/idioms.js，程式在 js/idiom-app.js） -->
+    <section id="view-idiom" class="view">
+      <div class="toolbar">
+        <select id="idiom-set" class="unit-select" aria-label="選擇成語課次"></select>
+      </div>
+      <div class="seg" role="tablist">
+        <button class="seg-btn active" data-mode="learn">📖 成語卡</button>
+        <button class="seg-btn" data-mode="match">🔗 解釋配對</button>
+        <button class="seg-btn" data-mode="fill">✏️ 句子填空</button>
+      </div>
+
+      <div id="idiom-learn" class="idiom-pane"></div>
+
+      <div id="idiom-match" class="idiom-pane hidden">
+        <p class="hint center">先點一個<b>成語</b>，再點它的<b>解釋</b>，配成一對！</p>
+        <div class="match-words" id="match-words"></div>
+        <div class="match-means" id="match-means"></div>
+        <p class="feedback" id="match-msg"></p>
+        <div class="card-actions"><button class="btn primary hidden" id="match-again">再玩一次</button></div>
+      </div>
+
+      <div id="idiom-fill" class="idiom-pane hidden">
+        <div class="card" id="fill-play">
+          <div class="quiz-top"><span id="fill-progress"></span><span id="fill-score"></span></div>
+          <div class="progress"><div id="fill-bar"></div></div>
+          <p class="q-label">選出句子裡缺少的成語</p>
+          <p class="fill-sentence" id="fill-sentence"></p>
+          <div class="fill-options" id="fill-options"></div>
+          <p class="feedback" id="fill-feedback"></p>
+          <button class="btn primary hidden" id="fill-next">下一題 ▶</button>
+        </div>
+        <div class="card center hidden" id="fill-result">
+          <div class="result-emoji" id="fill-emoji"></div>
+          <h2 id="fill-title"></h2>
+          <div id="fill-review"></div>
+          <button class="btn primary" id="fill-again">再玩一次</button>
+        </div>
       </div>
     </section>
 
@@ -221,7 +262,9 @@
   <div id="toast" class="toast" role="status"></div>
 
   <script src="js/data.js"></script>
+  <script src="js/idioms.js"></script>
   <script src="js/app.js"></script>
   <script src="js/games.js"></script>
+  <script src="js/idiom-app.js"></script>
 </body>
 </html>
